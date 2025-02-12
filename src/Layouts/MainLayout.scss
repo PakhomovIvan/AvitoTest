@@ -1,0 +1,18 @@
+.wrapper {
+  display: flex;
+  gap: 20px;
+}
+
+.wrapper-menu {
+  position: sticky;
+  top: 0;
+  bottom: 0;
+  width: 100px;
+  height: 100vh;
+  padding: 20px 0 20px 20px;
+}
+
+.wrapper-outlet {
+  flex: 1 1;
+  padding: 20px 20px 20px 0;
+}
