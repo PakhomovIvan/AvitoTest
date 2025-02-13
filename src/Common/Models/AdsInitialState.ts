@@ -1,5 +1,5 @@
-import { Ad } from './Ad'
+import { AdParams } from './AdParams'
 
 export interface AdsInitialState {
-  ads: Ad[]
+  ads: AdParams[]
 }

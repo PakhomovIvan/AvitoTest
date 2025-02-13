@@ -1,12 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
 import axios, { AxiosError } from 'axios'
 import adsSlice from './slices/adsSlice'
+import selectedAdSlice from './slices/selectedAdSlice'
 import spinnerSlice from './slices/spinnerSlice'
 import toastSlice, { setToast } from './slices/toastSlice'
 
 const store = configureStore({
   reducer: {
     ads: adsSlice,
+    selectedAd: selectedAdSlice,
     toast: toastSlice,
     spinner: spinnerSlice,
   },

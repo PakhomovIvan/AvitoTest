@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
-import { Ad } from '../../Common/Models/Ad'
+import { AdParams } from '../../Common/Models/AdParams'
 import { AdsInitialState } from '../../Common/Models/AdsInitialState'
 
 const initialState: AdsInitialState = {
@@ -10,7 +10,7 @@ const initialState: AdsInitialState = {
 export const fetchAds = createAsyncThunk(
   'ads/fetchAds',
   async (url: string) => {
-    const res = await axios.get<Ad[]>(url)
+    const res = await axios.get<AdParams[]>(url)
     return res.data
   }
 )
@@ -28,6 +28,6 @@ const adsSlice = createSlice({
 
 export const { reducer: adsReducer, actions: adsAction } = adsSlice
 
-export const selectAds = (state: { ads: Ad }) => state.ads
+export const selectAds = (state: { ads: AdParams }) => state.ads
 
 export default adsSlice.reducer

@@ -3,13 +3,20 @@ import { DataView } from 'primereact/dataview'
 import { classNames } from 'primereact/utils'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { AdParams } from '../../Common/Models/AdParams'
 import { fetchAds, selectAds } from '../../Stores/slices/adsSlice'
+import { selectedAdActions } from '../../Stores/slices/selectedAdSlice'
 import { hideSpinner, showSpinner } from '../../Stores/slices/spinnerSlice'
 import { AppDispatch } from '../../Stores/store'
+import './AdsList.scss'
 
 export default function AdsList() {
   const dispatch = useDispatch<AppDispatch>()
+  const navigate = useNavigate()
   const ads = useSelector(selectAds)
+
+  const adsList: AdParams[] = ads.ads
 
   useEffect(() => {
     dispatch(showSpinner())
@@ -18,7 +25,7 @@ export default function AdsList() {
     )
   }, [dispatch])
 
-  const itemTemplate = (ad, index) => {
+  const itemTemplate = (ad: AdParams, index: number) => {
     return (
       <div className="col-12" key={ad.id}>
         <div
@@ -44,7 +51,11 @@ export default function AdsList() {
               </div>
             </div>
             <div className="flex sm:flex-column align-items-center sm:align-items-end gap-3 sm:gap-2">
-              <Button label="Открыть" className="p-button-rounded"></Button>
+              <Button
+                label="Открыть"
+                className="p-button-rounded"
+                onClick={() => navigate(`/item/${ad.id}`)}
+              ></Button>
             </div>
           </div>
         </div>
@@ -52,11 +63,11 @@ export default function AdsList() {
     )
   }
 
-  const listTemplate = (items: Ad) => {
+  const listTemplate = (items: AdParams[]) => {
     if (!items || items.length === 0) return null
 
-    let list = items.map((product, index) => {
-      return itemTemplate(product, index)
+    const list = items.map((ad, index) => {
+      return itemTemplate(ad, index)
     })
 
     return <div className="grid grid-nogutter">{list}</div>
@@ -64,9 +75,18 @@ export default function AdsList() {
 
   return (
     <div className="card">
+      <div>
+        <Button
+          label="Разместить объявление"
+          onClick={() => {
+            dispatch(selectedAdActions.changeMode('create'))
+            navigate('/form', { relative: 'path' })
+          }}
+        ></Button>
+      </div>
       {ads && (
         <DataView
-          value={ads.ads}
+          value={adsList}
           listTemplate={listTemplate}
           paginator
           emptyMessage="Не найдено ни одного объявления"

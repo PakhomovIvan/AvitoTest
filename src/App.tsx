@@ -4,8 +4,9 @@ import 'primereact/resources/primereact.css'
 import 'primereact/resources/themes/md-dark-indigo/theme.css'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import './App.scss'
-import Ads from './Common/Components/Ads'
 import MainLayout from './Layouts/MainLayout'
+
+import Ad from './Pages/Ad/Ad'
 import AdsForm from './Pages/AdsForm/AdsForm'
 import AdsList from './Pages/AdsList/AdsList'
 import NotFoundPage from './Pages/NotFoundPage/NotFoundPage'
@@ -18,8 +19,8 @@ function App() {
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Navigate to="/list" replace />} />
+          <Route path="/item/:id" element={<Ad />} />
           <Route path="/list" element={<AdsList />} />
-          <Route path="/item/:id" element={<Ads />} />
           <Route path="/form" element={<AdsForm />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>

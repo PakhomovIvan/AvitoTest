@@ -1,6 +1,7 @@
 import { AdType } from './AdType'
 
-export interface Ad {
+export interface AdParams {
+  id: number
   name: string
   description: string
   location: string
