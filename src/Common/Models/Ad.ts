@@ -5,4 +5,5 @@ export interface Ad {
   description: string
   location: string
   type: AdType
+  image?: string
 }

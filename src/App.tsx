@@ -1,3 +1,7 @@
+import 'primeflex/primeflex.css'
+import 'primeicons/primeicons.css'
+import 'primereact/resources/primereact.css'
+import 'primereact/resources/themes/md-dark-indigo/theme.css'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import './App.scss'
 import Ads from './Common/Components/Ads'
