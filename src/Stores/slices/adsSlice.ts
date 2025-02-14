@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import axios from 'axios'
 import { AdParams } from '../../Common/Models/AdParams'
 import { AdsInitialState } from '../../Common/Models/AdsInitialState'
@@ -15,6 +15,15 @@ export const fetchAds = createAsyncThunk(
   }
 )
 
+export const postAd = createAsyncThunk<
+  AdParams,
+  { url: string; ad: Omit<AdParams, 'id'> },
+  { rejectValue: string }
+>('ads/postAd', async ({ url, ad }) => {
+  const res = await axios.post<AdParams>(url, ad)
+  return res.data
+})
+
 const adsSlice = createSlice({
   name: 'ads',
   initialState,
@@ -23,11 +32,17 @@ const adsSlice = createSlice({
     builder.addCase(fetchAds.fulfilled, (state, action) => {
       state.ads = action.payload
     })
+    builder.addCase(
+      postAd.fulfilled,
+      (state, action: PayloadAction<AdParams>) => {
+        state.ads = [...state.ads, action.payload]
+      }
+    )
   },
 })
 
 export const { reducer: adsReducer, actions: adsAction } = adsSlice
 
-export const selectAds = (state: { ads: AdParams }) => state.ads
+export const selectAds = (state: { ads: { ads: AdParams[] } }) => state.ads.ads
 
 export default adsSlice.reducer

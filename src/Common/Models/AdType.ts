@@ -1,1 +1,1 @@
-export type AdType = 'Квартира' | 'Авто' | 'Услуги'
+export type AdType = 'Недвижимость' | 'Авто' | 'Услуги'

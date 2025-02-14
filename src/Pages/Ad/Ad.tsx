@@ -14,7 +14,8 @@ const Ad = () => {
   const navigate = useNavigate()
   const params = useParams()
   const ads = useSelector(selectAds)
-  const adList: AdParams[] = ads.ads
+  const adList: AdParams[] = ads
+  const url = import.meta.env.VITE_API_URL
 
   const ad: AdParams | undefined = adList.find(
     (adItem: AdParams) => adItem.id === Number(params.id)
@@ -31,7 +32,7 @@ const Ad = () => {
     dispatch(showSpinner())
     dispatch(
       fetchSelectedAd({
-        url: import.meta.env.VITE_API_URL,
+        url,
         id: Number(params.id),
       })
     )

@@ -15,15 +15,12 @@ export default function AdsList() {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
   const ads = useSelector(selectAds)
-
-  const adsList: AdParams[] = ads.ads
+  const url = import.meta.env.VITE_API_URL
 
   useEffect(() => {
     dispatch(showSpinner())
-    dispatch(fetchAds(import.meta.env.VITE_API_URL)).finally(() =>
-      dispatch(hideSpinner())
-    )
-  }, [dispatch])
+    dispatch(fetchAds(url)).finally(() => dispatch(hideSpinner()))
+  }, [dispatch, url])
 
   const itemTemplate = (ad: AdParams, index: number) => {
     return (
@@ -86,7 +83,7 @@ export default function AdsList() {
       </div>
       {ads && (
         <DataView
-          value={adsList}
+          value={ads}
           listTemplate={listTemplate}
           paginator
           emptyMessage="Не найдено ни одного объявления"

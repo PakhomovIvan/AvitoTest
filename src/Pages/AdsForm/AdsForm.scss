@@ -1,0 +1,17 @@
+.form-wrapper {
+  .ad-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .form-controls {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .steps-panel {
+    margin: 0 auto;
+    max-width: 40%;
+  }
+}
