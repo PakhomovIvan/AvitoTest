@@ -1,10 +1,32 @@
 services:
-  web:
-    build: .
+  server:
+    build:
+      context: . #  Корневой каталог проекта
+      dockerfile: server/Dockerfile
     ports:
-      - '80:80'
-    volumes:
-      - .:/app
-      - /app/node_modules
-    environment:
-      - CHOKIDAR_USEPOLLING=true
+      - '3000:3000' #  Перенаправляем порт 3000 (или любой, который вы используете) с хоста на контейнер
+    #  (Опционально)  Если нужно монтировать код для разработки
+    # volumes:
+    #   - ./server:/app
+    #   - /app/node_modules
+    # command: node app.js   #  (По умолчанию)
+    healthcheck: # Добавляем healthcheck
+      test: ['CMD', 'curl', '-f', 'http://localhost:3000/items'] # Или любой другой endpoint для проверки работоспособности
+      interval: 10s # Проверять каждые 10 секунд
+      timeout: 5s # Таймаут 5 секунд
+      retries: 3 # Повторить 3 раза
+      start_period: 10s # Подождать 10 секунд перед первой проверкой
+  client:
+    build:
+      context: . # Корневой каталог проекта
+      dockerfile: Dockerfile
+    ports:
+      - '80:80' #  Перенаправляем порт 80 (или любой, который вы используете) с хоста на контейнер
+    depends_on:
+      server:
+        condition: service_healthy #  Зависимость: клиент запускается после сервера (если нужно)
+    #  (Опционально)  Если нужен прокси для разработки (например, для Vite):
+    # volumes:
+    #   - ./client:/app #  Монтируем код, чтобы изменения были видны сразу
+    #   - /app/node_modules
+    # command: npm run dev #  Используйте команду для запуска dev-сервера Vite
