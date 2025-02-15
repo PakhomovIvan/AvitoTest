@@ -15,6 +15,11 @@ export const fetchAds = createAsyncThunk(
   }
 )
 
+export const deleteAd = createAsyncThunk('ads/deleteAd', async (id: number) => {
+  await axios.delete(`${import.meta.env.VITE_API_URL}/${id}`)
+  return id
+})
+
 export const postAd = createAsyncThunk<
   AdParams,
   { url: string; ad: Omit<AdParams, 'id'> },
@@ -36,6 +41,12 @@ const adsSlice = createSlice({
       postAd.fulfilled,
       (state, action: PayloadAction<AdParams>) => {
         state.ads = [...state.ads, action.payload]
+      }
+    )
+    builder.addCase(
+      deleteAd.fulfilled,
+      (state, action: PayloadAction<number>) => {
+        state.ads = state.ads.filter((ad) => ad.id !== action.payload)
       }
     )
   },

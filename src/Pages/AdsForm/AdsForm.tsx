@@ -1,7 +1,8 @@
 import { Button } from 'primereact/button'
+import { confirmPopup, ConfirmPopup } from 'primereact/confirmpopup'
 import { MenuItem } from 'primereact/menuitem'
 import { Steps } from 'primereact/steps'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import CarTypeForm from '../../Common/Components/Form/CarTypeForm'
@@ -12,8 +13,11 @@ import { AdParams } from '../../Common/Models/AdParams'
 import { CarAd } from '../../Common/Models/CarAd'
 import { RealtyAd } from '../../Common/Models/RealtyAd'
 import { ServicesAd } from '../../Common/Models/ServicesAd'
-import { postAd } from '../../Stores/slices/adsSlice'
-import { selectMode } from '../../Stores/slices/selectedAdSlice'
+import { deleteAd, fetchAds, postAd } from '../../Stores/slices/adsSlice'
+import {
+  selectMode,
+  selectSelectedAd,
+} from '../../Stores/slices/selectedAdSlice'
 import { hideSpinner, showSpinner } from '../../Stores/slices/spinnerSlice'
 import { setToast } from '../../Stores/slices/toastSlice'
 import { AppDispatch } from '../../Stores/store'
@@ -22,7 +26,9 @@ import './AdsForm.scss'
 const AdsForm = () => {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
-  const selectedAd = useSelector(selectMode)
+  const selectedAd = useSelector(selectSelectedAd)
+  const selectedAdMode = useSelector(selectMode)
+  const confirmPopupRef = useRef(null)
 
   const url = import.meta.env.VITE_API_URL
 
@@ -43,6 +49,32 @@ const AdsForm = () => {
       label: '',
     },
   ]
+
+  useEffect(() => {
+    if (selectedAd && String(selectedAdMode) === 'edit') {
+      setMainFormValue({
+        name: selectedAd?.name,
+        description: selectedAd?.description,
+        location: selectedAd?.location,
+        type: selectedAd?.type,
+        image: selectedAd?.image,
+      })
+
+      const additionProperty = ({
+        id,
+        name,
+        description,
+        location,
+        type,
+        image,
+        ...selectedAd
+      }) => selectedAd
+
+      const spreadAdditionProperty = additionProperty(selectedAd)
+
+      setAdditionalFormValue({ ...spreadAdditionProperty })
+    }
+  }, [])
 
   const handleChangeMainForm = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target
@@ -82,6 +114,33 @@ const AdsForm = () => {
         })
       )
     }
+  }
+
+  const accept = (id: number) => {
+    dispatch(showSpinner())
+    dispatch(deleteAd(id))
+      .unwrap()
+      .then(() => {
+        dispatch(fetchAds(import.meta.env.VITE_API_URL))
+        dispatch(
+          setToast({
+            type: 'success',
+            message: 'Объявление удалено',
+          })
+        )
+      })
+      .catch(() =>
+        dispatch(
+          setToast({
+            type: 'error',
+            message: 'Объявление не было удалено',
+          })
+        )
+      )
+      .finally(() => {
+        dispatch(hideSpinner())
+        navigate('/list')
+      })
   }
 
   const handleSubmit = () => {
@@ -162,9 +221,25 @@ const AdsForm = () => {
     }
   }
 
+  const showPopap = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    id: number
+  ) => {
+    confirmPopup({
+      target: event.currentTarget,
+      message: <span>Вы действительно хотите удалить объявление?</span>,
+      icon: 'pi pi-exclamation-triangle',
+      acceptIcon: 'pi pi-check',
+      acceptLabel: 'Да',
+      rejectIcon: 'pi pi-times',
+      rejectLabel: 'Нет',
+      accept: () => accept(id),
+    })
+  }
+
   return (
     <div className="form-wrapper">
-      {String(selectedAd) === 'edit' ? (
+      {String(selectedAdMode) === 'edit' ? (
         <h1>Редактирование объявления</h1>
       ) : (
         <h1>Создание объявления</h1>
@@ -198,10 +273,17 @@ const AdsForm = () => {
       </form>
       <Steps model={items} activeIndex={activeStep} className="steps-panel" />
       <div className="form-controls">
+        <ConfirmPopup ref={confirmPopupRef} />
         <Button
           label="Назад"
           onClick={() => (activeStep === 0 ? navigate(-1) : setActiveStep(0))}
         ></Button>
+        {String(selectedAdMode) === 'edit' && (
+          <Button
+            label="Удалить"
+            onClick={(e) => showPopap(e, selectedAd?.id)}
+          ></Button>
+        )}
         <Button
           label={activeStep === 0 ? 'Далее' : 'Сохранить'}
           onClick={activeStep === 0 ? handleClickNextButton : handleSubmit}

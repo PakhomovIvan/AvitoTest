@@ -1,6 +1,7 @@
 import { Dropdown } from 'primereact/dropdown'
 import { FloatLabel } from 'primereact/floatlabel'
 import { InputText } from 'primereact/inputtext'
+import { ServiceTypeFormProps } from '../../Models/TypeFormProps'
 
 const MainForm = ({
   handleChange,

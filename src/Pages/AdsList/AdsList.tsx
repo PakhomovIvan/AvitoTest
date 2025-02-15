@@ -86,7 +86,7 @@ export default function AdsList() {
           value={ads}
           listTemplate={listTemplate}
           paginator
-          emptyMessage="Не найдено ни одного объявления"
+          emptyMessage="Список объявлений пуст"
           rows={5}
         />
       )}
