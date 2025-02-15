@@ -13,7 +13,7 @@ import { AdParams } from '../../Common/Models/AdParams'
 import { CarAd } from '../../Common/Models/CarAd'
 import { RealtyAd } from '../../Common/Models/RealtyAd'
 import { ServicesAd } from '../../Common/Models/ServicesAd'
-import { deleteAd, fetchAds, postAd } from '../../Stores/slices/adsSlice'
+import { deleteAd, fetchAds, postAd, putAd } from '../../Stores/slices/adsSlice'
 import {
   selectMode,
   selectSelectedAd,
@@ -24,21 +24,22 @@ import { AppDispatch } from '../../Stores/store'
 import './AdsForm.scss'
 
 const AdsForm = () => {
-  const dispatch = useDispatch<AppDispatch>()
-  const navigate = useNavigate()
-  const selectedAd = useSelector(selectSelectedAd)
-  const selectedAdMode = useSelector(selectMode)
-  const confirmPopupRef = useRef(null)
-
   const url = import.meta.env.VITE_API_URL
 
+  const dispatch = useDispatch<AppDispatch>()
+  const navigate = useNavigate()
+
+  const selectedAd = useSelector(selectSelectedAd)
+  const selectedAdMode = useSelector(selectMode)
+
+  const confirmPopupRef = useRef(null)
+
   const [activeStep, setActiveStep] = useState<number>(0)
-  const [mainFormValue, setMainFormValue] = useState<Omit<
-    AdParams,
-    'id'
-  > | null>(null)
+  const [mainFormValue, setMainFormValue] = useState<
+    Omit<AdParams, 'id'> | null | object
+  >(null)
   const [additionalFormValue, setAdditionalFormValue] = useState<
-    CarAd | ServicesAd | RealtyAd | null
+    CarAd | ServicesAd | RealtyAd | null | object
   >(null)
 
   const items: MenuItem[] = [
@@ -68,13 +69,13 @@ const AdsForm = () => {
         type,
         image,
         ...selectedAd
-      }) => selectedAd
+      }: AdParams) => selectedAd
 
       const spreadAdditionProperty = additionProperty(selectedAd)
 
       setAdditionalFormValue({ ...spreadAdditionProperty })
     }
-  }, [])
+  }, [selectedAd, selectedAdMode])
 
   const handleChangeMainForm = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target
@@ -159,7 +160,7 @@ const AdsForm = () => {
       )
     } else if (
       mainFormValue?.type === 'Услуги' &&
-      (additionalFormValue?.serviceType ||
+      (!additionalFormValue?.serviceType ||
         !additionalFormValue?.experience ||
         !additionalFormValue?.cost ||
         !additionalFormValue?.workSchedule)
@@ -184,6 +185,43 @@ const AdsForm = () => {
           message: 'Все поля обязательны для заполнения',
         })
       )
+    } else if (selectedAd && String(selectedAdMode) === 'edit') {
+      const combinedFormValues = {
+        ...mainFormValue,
+        ...additionalFormValue,
+        id: selectedAd.id,
+      }
+
+      dispatch(showSpinner())
+      dispatch(
+        putAd({
+          id: selectedAd.id,
+          ad: combinedFormValues as AdParams,
+        })
+      )
+        .unwrap()
+        .then(() => {
+          dispatch(
+            setToast({
+              type: 'success',
+              message: 'Объявление обновлено',
+            })
+          )
+          navigate('/list')
+        })
+        .catch(() =>
+          dispatch(
+            setToast({
+              type: 'error',
+              message: 'Объявление не обновлено',
+            })
+          )
+        )
+        .finally(() => {
+          dispatch(hideSpinner())
+          setMainFormValue(null)
+          setAdditionalFormValue(null)
+        })
     } else {
       dispatch(showSpinner())
       dispatch(
@@ -278,10 +316,10 @@ const AdsForm = () => {
           label="Назад"
           onClick={() => (activeStep === 0 ? navigate(-1) : setActiveStep(0))}
         ></Button>
-        {String(selectedAdMode) === 'edit' && (
+        {selectedAd && String(selectedAdMode) === 'edit' && (
           <Button
             label="Удалить"
-            onClick={(e) => showPopap(e, selectedAd?.id)}
+            onClick={(e) => showPopap(e, selectedAd.id)}
           ></Button>
         )}
         <Button
