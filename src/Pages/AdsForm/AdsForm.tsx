@@ -1,20 +1,16 @@
 import { Button } from 'primereact/button'
-import { Dropdown } from 'primereact/dropdown'
-import { FloatLabel } from 'primereact/floatlabel'
-import { InputText } from 'primereact/inputtext'
 import { MenuItem } from 'primereact/menuitem'
 import { Steps } from 'primereact/steps'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import CarTypeForm from '../../Common/Components/TypeForm/CarTypeForm'
-import RealtyTypeForm from '../../Common/Components/TypeForm/RealtyTypeForm'
-import ServiceTypeForm from '../../Common/Components/TypeForm/ServiceTypeForm'
+import CarTypeForm from '../../Common/Components/Form/CarTypeForm'
+import MainForm from '../../Common/Components/Form/MainForm'
+import RealtyTypeForm from '../../Common/Components/Form/RealtyTypeForm'
+import ServiceTypeForm from '../../Common/Components/Form/ServiceTypeForm'
 import { AdParams } from '../../Common/Models/AdParams'
-import { AdType } from '../../Common/Models/AdType'
 import { CarAd } from '../../Common/Models/CarAd'
 import { RealtyAd } from '../../Common/Models/RealtyAd'
-import { selectedType } from '../../Common/Models/SelectedType'
 import { ServicesAd } from '../../Common/Models/ServicesAd'
 import { postAd } from '../../Stores/slices/adsSlice'
 import { selectMode } from '../../Stores/slices/selectedAdSlice'
@@ -24,28 +20,20 @@ import { AppDispatch } from '../../Stores/store'
 import './AdsForm.scss'
 
 const AdsForm = () => {
+  const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
   const selectedAd = useSelector(selectMode)
-  const dispatch = useDispatch<AppDispatch>()
+
   const url = import.meta.env.VITE_API_URL
 
   const [activeStep, setActiveStep] = useState<number>(0)
-
   const [mainFormValue, setMainFormValue] = useState<Omit<
     AdParams,
     'id'
   > | null>(null)
-  const [secondFormValue, setSecondFormValue] = useState<
+  const [additionalFormValue, setAdditionalFormValue] = useState<
     CarAd | ServicesAd | RealtyAd | null
   >(null)
-
-  const [selectedType, setSelectedType] = useState<selectedType | null>(null)
-
-  const adType = [
-    { type: 'Недвижимость' },
-    { type: 'Авто' },
-    { type: 'Услуги' },
-  ]
 
   const items: MenuItem[] = [
     {
@@ -64,9 +52,9 @@ const AdsForm = () => {
     }))
   }
 
-  const handleChangeSecondForm = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeAdditionForm = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target
-    setSecondFormValue((prevValues) => ({
+    setAdditionalFormValue((prevValues) => ({
       ...prevValues,
       [id]: value,
     }))
@@ -74,18 +62,18 @@ const AdsForm = () => {
 
   const handleClickNextButton = () => {
     if (
-      !mainFormValue?.name.trim() ||
-      !mainFormValue?.description.trim() ||
-      !mainFormValue?.location.trim()
+      !mainFormValue?.name ||
+      !mainFormValue?.description ||
+      !mainFormValue?.location
     ) {
       dispatch(
         setToast({
           type: 'warn',
           message:
-            'Все поля (кроме "Ссылка на изображение") обязательны для заполнения',
+            'Все поля обязательны для заполнения (кроме "Ссылка на изображение")',
         })
       )
-    } else if (activeStep === 0 && selectedType) setActiveStep(1)
+    } else if (activeStep === 0 && mainFormValue?.type) setActiveStep(1)
     else {
       dispatch(
         setToast({
@@ -97,36 +85,81 @@ const AdsForm = () => {
   }
 
   const handleSubmit = () => {
-    dispatch(showSpinner())
-    dispatch(
-      postAd({
-        url,
-        ad: {
-          ...mainFormValue,
-          type: selectedType?.type as AdType,
-          ...secondFormValue,
-        },
-      })
-    )
-      .unwrap()
-      .then(() => {
-        dispatch(
-          setToast({
-            type: 'success',
-            message: 'Объявление опубликовано',
-          })
-        )
-        navigate('/')
-      })
-      .catch(() =>
-        dispatch(
-          setToast({
-            type: 'error',
-            message: 'Объявление не опубликовано',
-          })
-        )
+    if (
+      mainFormValue?.type === 'Авто' &&
+      (!additionalFormValue?.brand ||
+        !additionalFormValue?.model ||
+        !additionalFormValue?.year ||
+        !additionalFormValue?.mileage)
+    ) {
+      dispatch(
+        setToast({
+          type: 'warn',
+          message: 'Все поля обязательны для заполнения (кроме "Пробег") ',
+        })
       )
-      .finally(() => dispatch(hideSpinner()))
+    } else if (
+      mainFormValue?.type === 'Услуги' &&
+      (additionalFormValue?.serviceType ||
+        !additionalFormValue?.experience ||
+        !additionalFormValue?.cost ||
+        !additionalFormValue?.workSchedule)
+    ) {
+      dispatch(
+        setToast({
+          type: 'warn',
+          message:
+            'Все поля обязательны для заполнения (кроме "Время работы") ',
+        })
+      )
+    } else if (
+      mainFormValue?.type === 'Недвижимость' &&
+      (!additionalFormValue?.propertyType ||
+        !additionalFormValue?.area ||
+        !additionalFormValue?.rooms ||
+        !additionalFormValue?.price)
+    ) {
+      dispatch(
+        setToast({
+          type: 'warn',
+          message: 'Все поля обязательны для заполнения',
+        })
+      )
+    } else {
+      dispatch(showSpinner())
+      dispatch(
+        postAd({
+          url,
+          ad: {
+            ...mainFormValue,
+            ...additionalFormValue,
+          },
+        })
+      )
+        .unwrap()
+        .then(() => {
+          dispatch(
+            setToast({
+              type: 'success',
+              message: 'Объявление опубликовано',
+            })
+          )
+          navigate('/')
+        })
+        .catch(() =>
+          dispatch(
+            setToast({
+              type: 'error',
+              message: 'Объявление не опубликовано',
+            })
+          )
+        )
+        .finally(() => {
+          dispatch(hideSpinner())
+          setMainFormValue(null)
+          setAdditionalFormValue(null)
+        })
+    }
   }
 
   return (
@@ -139,75 +172,27 @@ const AdsForm = () => {
 
       <form className="ad-form">
         {activeStep === 0 && (
-          <>
-            <FloatLabel>
-              <InputText
-                autoComplete="off"
-                className="w-full"
-                id="name"
-                value={mainFormValue?.name}
-                onChange={handleChangeMainForm}
-              />
-              <label htmlFor="name">Название</label>
-            </FloatLabel>
-            <FloatLabel>
-              <InputText
-                autoComplete="off"
-                className="w-full"
-                id="description"
-                value={mainFormValue?.description}
-                onChange={handleChangeMainForm}
-              />
-              <label htmlFor="description">Описание</label>
-            </FloatLabel>
-            <FloatLabel>
-              <InputText
-                autoComplete="off"
-                className="w-full"
-                id="location"
-                value={mainFormValue?.location}
-                onChange={handleChangeMainForm}
-              />
-              <label htmlFor="location">Местоположение</label>
-            </FloatLabel>
-            <FloatLabel className="w-full">
-              <InputText
-                autoComplete="off"
-                className="w-full"
-                id="image"
-                value={mainFormValue?.image}
-                onChange={handleChangeMainForm}
-              />
-              <label htmlFor="image">Ссылка на изображение</label>
-            </FloatLabel>
-            <FloatLabel className="w-full">
-              <Dropdown
-                inputId="type"
-                value={selectedType}
-                onChange={(e) => setSelectedType(e.value)}
-                options={adType}
-                optionLabel="type"
-                className="w-full"
-              />
-              <label htmlFor="type">Тип объявления</label>
-            </FloatLabel>
-          </>
+          <MainForm
+            handleChange={handleChangeMainForm}
+            formValue={mainFormValue}
+            setAdditionalFormValue={setAdditionalFormValue}
+          />
         )}
         {activeStep === 1 &&
-          (selectedType?.type === 'Недвижимость' ? (
+          (mainFormValue?.type === 'Недвижимость' ? (
             <RealtyTypeForm
-              handleChange={handleChangeSecondForm}
-              formValue={secondFormValue}
+              handleChange={handleChangeAdditionForm}
+              formValue={additionalFormValue}
             />
-          ) : selectedType?.type === 'Авто' ? (
+          ) : mainFormValue?.type === 'Авто' ? (
             <CarTypeForm
-              handleChange={handleChangeSecondForm}
-              formValue={secondFormValue}
+              handleChange={handleChangeAdditionForm}
+              formValue={additionalFormValue}
             />
           ) : (
             <ServiceTypeForm
-              handleChange={handleChangeSecondForm}
-              formValue={secondFormValue}
+              handleChange={handleChangeAdditionForm}
+              formValue={additionalFormValue}
             />
           ))}
       </form>

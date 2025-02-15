@@ -1,6 +1,4 @@
-import { AdParams } from './AdParams'
-
-export interface ServicesAd extends AdParams {
+export interface ServicesAd {
   serviceType: string
   experience: number
   cost: number

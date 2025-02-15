@@ -1,6 +1,4 @@
-import { AdParams } from './AdParams'
-
-export interface RealtyAd extends AdParams {
+export interface RealtyAd {
   propertyType: string
   area: number
   rooms: number

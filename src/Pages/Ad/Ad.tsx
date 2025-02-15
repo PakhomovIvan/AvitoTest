@@ -77,7 +77,7 @@ const Ad = () => {
         <div>
           <p>{`Марка: ${ad.brand}`}</p>
           <p>{`Модель: ${ad.model}`}</p>
-          <p>{`Год выпуска: ${ad.year}`}</p>
+          <p>{`Год выпуска: ${ad.year}`} г.</p>
           {ad.mileage && <p>{`Пробег: ${ad.mileage} км`}</p>}
         </div>
       )}

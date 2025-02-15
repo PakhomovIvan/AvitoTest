@@ -1,6 +1,4 @@
-import { AdParams } from './AdParams'
-
-export interface CarAd extends AdParams {
+export interface CarAd {
   brand: string
   model: string
   year: Date | number
