@@ -1,6 +1,6 @@
 export interface CarAd {
   brand: string
   model: string
-  year: Date | number
+  year: number
   mileage?: number
 }

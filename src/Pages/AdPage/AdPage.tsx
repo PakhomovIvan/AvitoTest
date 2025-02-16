@@ -57,59 +57,54 @@ const Ad = () => {
   }
 
   return (
-    <div>
-      <Button
-        label="К списку объявлений"
-        onClick={() => linkTo('/list')}
-      ></Button>
-      <h2>{ad.name}</h2>
-      {/* <img
-        src={ad.image ? ad.image : '/img/no-image.png'}
-        onError={({ currentTarget }) => {
-          currentTarget.onerror = null // prevents looping
-          currentTarget.src = '/img/no-image.png'
-        }}
-        alt="productImage"
-        width={160}
-        height={107}
-      /> */}
-      <Image
-        src={ad.image ? ad.image : '/img/no-image.png'}
-        onError={({ currentTarget }) => {
-          currentTarget.src = '/img/no-image.png'
-        }}
-        alt="productImage"
-        width="160"
-        preview
-      />
-      <p>{ad.description}</p>
-      <h3>Категория: {ad.type}</h3>
-      {ad.type === 'Недвижимость' && (
-        <div>
-          <p>{`Тип недвижимости: ${ad.propertyType}`}</p>
-          <p>{`Площадь: ${ad.area} м`}&sup2;</p>
-          <p>{`Комнат: ${ad.rooms}`}</p>
-          <p>{`Стоимость: ${ad.price} `}&#8381;</p>
+    <div className="ad-wrapper">
+      <div>
+        <h1>{ad.name}</h1>
+        <p>{ad.description}</p>
+      </div>
+      <div className="ad-list">
+        <Image
+          src={ad.image ? ad.image : '/img/no-image.png'}
+          onError={({ currentTarget }) => {
+            currentTarget.src = '/img/no-image.png'
+          }}
+          alt="productImage"
+          width="230"
+          preview
+        />
+        <div className="ad-info">
+          <h3>{ad.type}</h3>
+          {ad.type === 'Недвижимость' && (
+            <div>
+              <p>{`Тип: ${ad.propertyType}`}</p>
+              <p>{`Площадь: ${ad.area} м`}&sup2;</p>
+              <p>{`Комнат: ${ad.rooms}`}</p>
+              <p>{`Стоимость: ${ad.price} `}&#8381;</p>
+            </div>
+          )}
+          {ad.type === 'Авто' && (
+            <div>
+              <p>{`Марка: ${ad.brand}`}</p>
+              <p>{`Модель: ${ad.model}`}</p>
+              <p>{`Год выпуска: ${ad.year}`} г.</p>
+              {ad.mileage && <p>{`Пробег: ${ad.mileage} км`}</p>}
+            </div>
+          )}
+          {ad.type === 'Услуги' && (
+            <div>
+              <p>{`Вид услуги: ${ad.serviceType}`}</p>
+              <p>{`Опыт: ${ad.experience} лет`}</p>
+              <p>{`Стоимость услуги: ${ad.cost} `}&#8381;</p>
+              {ad.workSchedule && <p>{`Время работы: ${ad.workSchedule}`}</p>}
+            </div>
+          )}
         </div>
-      )}
-      {ad.type === 'Авто' && (
-        <div>
-          <p>{`Марка: ${ad.brand}`}</p>
-          <p>{`Модель: ${ad.model}`}</p>
-          <p>{`Год выпуска: ${ad.year}`} г.</p>
-          {ad.mileage && <p>{`Пробег: ${ad.mileage} км`}</p>}
-        </div>
-      )}
-      {ad.type === 'Услуги' && (
-        <div>
-          <p>{`Вид услуги: ${ad.serviceType}`}</p>
-          <p>{`Опыт: ${ad.experience} лет`}</p>
-          <p>{`Стоимость услуги: ${ad.cost} `}&#8381;</p>
-          {ad.workSchedule && <p>{`Время работы: ${ad.workSchedule}`}</p>}
-        </div>
-      )}
-
+      </div>
       <div className="controls">
+        <Button
+          label="К списку объявлений"
+          onClick={() => linkTo('/list')}
+        ></Button>
         <Button label="Редактировать" onClick={toEdit}></Button>
       </div>
     </div>

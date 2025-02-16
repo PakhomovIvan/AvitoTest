@@ -23,7 +23,7 @@ const ServiceTypeForm = ({ handleChange, formValue }: ServiceTypeFormProps) => {
       <FloatLabel>
         <InputText
           autoComplete="off"
-          keyfilter="pnum" // любое число, первое отличное от 0
+          keyfilter="pnum"
           className="w-full"
           id="experience"
           value={formValue?.experience}

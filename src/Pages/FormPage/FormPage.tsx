@@ -10,9 +10,9 @@ import MainForm from '../../Common/Components/Forms/MainForm'
 import RealtyTypeForm from '../../Common/Components/Forms/RealtyTypeForm'
 import ServiceTypeForm from '../../Common/Components/Forms/ServiceTypeForm'
 import { AdParams } from '../../Common/Models/AdParams'
-import { CarAd } from '../../Common/Models/CarAd'
-import { RealtyAd } from '../../Common/Models/RealtyAd'
-import { ServicesAd } from '../../Common/Models/ServicesAd'
+import { CarAd } from '../../Common/Models/TypeModels/CarAd'
+import { RealtyAd } from '../../Common/Models/TypeModels/RealtyAd'
+import { ServicesAd } from '../../Common/Models/TypeModels/ServicesAd'
 import { deleteAd, fetchAds, postAd, putAd } from '../../Stores/slices/adsSlice'
 import {
   selectMode,
