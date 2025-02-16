@@ -1,12 +1,13 @@
 import { Button } from 'primereact/button'
 import { DataView } from 'primereact/dataview'
+import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown'
 import { Image } from 'primereact/image'
-import { InputText } from 'primereact/inputtext'
 import { classNames } from 'primereact/utils'
-import { useEffect } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { AdParams } from '../../Common/Models/AdParams'
+import SearchInput from '../../Shared/search/SearchInput'
 import { fetchAds, selectAds } from '../../Stores/slices/adsSlice'
 import { selectedAdActions } from '../../Stores/slices/selectedAdSlice'
 import { hideSpinner, showSpinner } from '../../Stores/slices/spinnerSlice'
@@ -18,6 +19,13 @@ export default function AdsList() {
   const navigate = useNavigate()
   const ads = useSelector(selectAds)
   const url = import.meta.env.VITE_API_URL
+
+  const isFirstRender = useRef(true)
+  const [searchQuery, setSearchQuery] = useState<string>('')
+  const [selectedCategory, setSelectedCategory] =
+    useState<string>('Все категории')
+
+  const sortOptions = ['Все категории', 'Недвижимость', 'Авто', 'Услуги']
 
   useEffect(() => {
     dispatch(showSpinner())
@@ -66,6 +74,52 @@ export default function AdsList() {
     )
   }
 
+  const onSearch = useCallback((value: string): void => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+      return
+    }
+    setSearchQuery(value)
+  }, [])
+
+  const onSortChange = (event: DropdownChangeEvent) => {
+    const value = event.value
+    setSelectedCategory(value)
+  }
+
+  const header = () => {
+    return (
+      <div className="card-actions">
+        <Dropdown
+          options={sortOptions}
+          value={selectedCategory}
+          optionLabel="label"
+          placeholder="Категория"
+          onChange={onSortChange}
+          className="w-full sm:w-14rem"
+        />
+        <SearchInput onSearch={onSearch} />
+      </div>
+    )
+  }
+
+  const filteredAds = ads
+    ? ads.filter((ad) => {
+        const categoryFilter =
+          selectedCategory === 'Все категории' || ad.type === selectedCategory
+
+        let searchFilter = true
+
+        const searchTerm = searchQuery.toLowerCase()
+        searchFilter =
+          ad.name.toLowerCase().includes(searchTerm) ||
+          ad.description.toLowerCase().includes(searchTerm) ||
+          ad.location.toLowerCase().includes(searchTerm)
+
+        return categoryFilter && searchFilter
+      })
+    : ads
+
   const listTemplate = (items: AdParams[]) => {
     if (!items || items.length === 0) return null
 
@@ -78,23 +132,21 @@ export default function AdsList() {
 
   return (
     <div className="card">
-      <div className="card-actions">
-        <InputText placeholder="Поиск"></InputText>
-        <Button
-          label="Разместить объявление"
-          onClick={() => {
-            dispatch(selectedAdActions.changeMode('create'))
-            navigate('/form', { relative: 'path' })
-          }}
-        ></Button>
-      </div>
+      <Button
+        label="Разместить объявление"
+        onClick={() => {
+          dispatch(selectedAdActions.changeMode('create'))
+          navigate('/form', { relative: 'path' })
+        }}
+      ></Button>
       {ads && (
         <DataView
-          value={ads}
+          value={filteredAds}
           listTemplate={listTemplate}
           paginator
           emptyMessage="Список объявлений пуст"
           rows={5}
+          header={header()}
         />
       )}
     </div>
