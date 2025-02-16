@@ -16,6 +16,8 @@ const MainForm = ({
         <InputText
           autoComplete="off"
           className="w-full"
+          keyfilter={/^[а-яА-ЯёЁa-zA-Z0-9\s.,-]+$/}
+          maxLength={40}
           id="name"
           value={formValue?.name}
           onChange={handleChange}
@@ -26,6 +28,7 @@ const MainForm = ({
         <InputText
           autoComplete="off"
           className="w-full"
+          keyfilter={/^[а-яА-ЯёЁa-zA-Z0-9\s.,-]+$/}
           id="description"
           value={formValue?.description}
           onChange={handleChange}
@@ -36,6 +39,8 @@ const MainForm = ({
         <InputText
           autoComplete="off"
           className="w-full"
+          keyfilter={/^[а-яА-ЯёЁa-zA-Z0-9\s-]+$/}
+          maxLength={30}
           id="location"
           value={formValue?.location}
           onChange={handleChange}

@@ -1,4 +1,5 @@
 import { Button } from 'primereact/button'
+import { Image } from 'primereact/image'
 import { useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -7,7 +8,7 @@ import { selectAds } from '../../Stores/slices/adsSlice'
 import { fetchSelectedAd } from '../../Stores/slices/selectedAdSlice'
 import { hideSpinner, showSpinner } from '../../Stores/slices/spinnerSlice'
 import { AppDispatch } from '../../Stores/store'
-import './Ad.scss'
+import './AdPage.scss'
 
 const Ad = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -62,7 +63,25 @@ const Ad = () => {
         onClick={() => linkTo('/list')}
       ></Button>
       <h2>{ad.name}</h2>
-      <img src={ad.image} alt="productImage" width={200} />
+      {/* <img
+        src={ad.image ? ad.image : '/img/no-image.png'}
+        onError={({ currentTarget }) => {
+          currentTarget.onerror = null // prevents looping
+          currentTarget.src = '/img/no-image.png'
+        }}
+        alt="productImage"
+        width={160}
+        height={107}
+      /> */}
+      <Image
+        src={ad.image ? ad.image : '/img/no-image.png'}
+        onError={({ currentTarget }) => {
+          currentTarget.src = '/img/no-image.png'
+        }}
+        alt="productImage"
+        width="160"
+        preview
+      />
       <p>{ad.description}</p>
       <h3>Категория: {ad.type}</h3>
       {ad.type === 'Недвижимость' && (

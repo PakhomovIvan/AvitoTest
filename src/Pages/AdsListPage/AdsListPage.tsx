@@ -1,5 +1,7 @@
 import { Button } from 'primereact/button'
 import { DataView } from 'primereact/dataview'
+import { Image } from 'primereact/image'
+import { InputText } from 'primereact/inputtext'
 import { classNames } from 'primereact/utils'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -9,7 +11,7 @@ import { fetchAds, selectAds } from '../../Stores/slices/adsSlice'
 import { selectedAdActions } from '../../Stores/slices/selectedAdSlice'
 import { hideSpinner, showSpinner } from '../../Stores/slices/spinnerSlice'
 import { AppDispatch } from '../../Stores/store'
-import './AdsList.scss'
+import './AdsListPage.scss'
 
 export default function AdsList() {
   const dispatch = useDispatch<AppDispatch>()
@@ -31,10 +33,14 @@ export default function AdsList() {
             { 'border-top-1 surface-border': index !== 0 }
           )}
         >
-          <img
-            className="w-9 sm:w-16rem xl:w-10rem shadow-2 block xl:block mx-auto border-round"
-            src={ad.image}
+          <Image
+            src={ad.image ? ad.image : '/img/no-image.png'}
+            onError={({ currentTarget }) => {
+              currentTarget.src = '/img/no-image.png'
+            }}
             alt={ad.name}
+            width="160"
+            preview
           />
           <div className="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-end flex-1 gap-4">
             <div className="flex flex-column align-items-center sm:align-items-start gap-3">
@@ -72,7 +78,8 @@ export default function AdsList() {
 
   return (
     <div className="card">
-      <div>
+      <div className="card-actions">
+        <InputText placeholder="Поиск"></InputText>
         <Button
           label="Разместить объявление"
           onClick={() => {

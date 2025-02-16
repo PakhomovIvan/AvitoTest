@@ -5,10 +5,10 @@ import { Steps } from 'primereact/steps'
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import CarTypeForm from '../../Common/Components/Form/CarTypeForm'
-import MainForm from '../../Common/Components/Form/MainForm'
-import RealtyTypeForm from '../../Common/Components/Form/RealtyTypeForm'
-import ServiceTypeForm from '../../Common/Components/Form/ServiceTypeForm'
+import CarTypeForm from '../../Common/Components/Forms/CarTypeForm'
+import MainForm from '../../Common/Components/Forms/MainForm'
+import RealtyTypeForm from '../../Common/Components/Forms/RealtyTypeForm'
+import ServiceTypeForm from '../../Common/Components/Forms/ServiceTypeForm'
 import { AdParams } from '../../Common/Models/AdParams'
 import { CarAd } from '../../Common/Models/CarAd'
 import { RealtyAd } from '../../Common/Models/RealtyAd'
@@ -21,7 +21,7 @@ import {
 import { hideSpinner, showSpinner } from '../../Stores/slices/spinnerSlice'
 import { setToast } from '../../Stores/slices/toastSlice'
 import { AppDispatch } from '../../Stores/store'
-import './AdsForm.scss'
+import './FormPage.scss'
 
 const AdsForm = () => {
   const url = import.meta.env.VITE_API_URL
@@ -37,7 +37,13 @@ const AdsForm = () => {
   const [activeStep, setActiveStep] = useState<number>(0)
   const [mainFormValue, setMainFormValue] = useState<
     Omit<AdParams, 'id'> | null | object
-  >(null)
+  >({
+    name: '',
+    description: '',
+    location: '',
+    type: '',
+    image: '',
+  })
   const [additionalFormValue, setAdditionalFormValue] = useState<
     CarAd | ServicesAd | RealtyAd | null | object
   >(null)
@@ -319,11 +325,13 @@ const AdsForm = () => {
         {selectedAd && String(selectedAdMode) === 'edit' && (
           <Button
             label="Удалить"
+            severity="danger"
             onClick={(e) => showPopap(e, selectedAd.id)}
           ></Button>
         )}
         <Button
           label={activeStep === 0 ? 'Далее' : 'Сохранить'}
+          severity={activeStep === 0 ? undefined : 'success'}
           onClick={activeStep === 0 ? handleClickNextButton : handleSubmit}
         ></Button>
       </div>
