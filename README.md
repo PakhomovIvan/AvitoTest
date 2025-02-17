@@ -27,7 +27,67 @@
 
 ## 1. Структура проекта
 
-![2025-02-17 12-28-38 AdParams ts - AvitoTest - Visual Studio Code](https://github.com/user-attachments/assets/d2af6f6a-aaa5-41f8-97f6-1a8963892ab1)
+``` 
+├─ server
+│  ├─ app.js
+├─ src
+│  ├─ Common
+│  │  ├─ Components
+│  │  │  └─ Forms
+│  │  │     ├─ CarTypeForm.tsx
+│  │  │     ├─ MainForm.tsx
+│  │  │     ├─ RealtyTypeForm.tsx
+│  │  │     └─ ServiceTypeForm.tsx
+│  │  └─ Models
+│  │     ├─ AdFormValues.ts
+│  │     ├─ AdParams.ts
+│  │     ├─ AdType.ts
+│  │     ├─ AdsInitialState.ts
+│  │     ├─ SelectedAdInitialState.ts
+│  │     ├─ SelectedType.ts
+│  │     ├─ TypeFormProps.ts
+│  │     └─ TypeModels
+│  │        ├─ CarAd.ts
+│  │        ├─ RealtyAd.ts
+│  │        └─ ServicesAd.ts
+│  ├─ Layouts
+│  │  ├─ MainLayout.scss
+│  │  └─ MainLayout.tsx
+│  ├─ Pages
+│  │  ├─ AdPage
+│  │  │  ├─ AdPage.scss
+│  │  │  └─ AdPage.tsx
+│  │  ├─ AdsListPage
+│  │  │  ├─ AdsListPage.scss
+│  │  │  └─ AdsListPage.tsx
+│  │  ├─ FormPage
+│  │  │  ├─ FormPage.scss
+│  │  │  └─ FormPage.tsx
+│  │  └─ NotFoundPage
+│  │     └─ NotFoundPage.tsx
+│  ├─ Shared
+│  │  ├─ search
+│  │  │  ├─ SearchInput.tsx
+│  │  │  └─ SearchInputProps.ts
+│  │  ├─ spinner
+│  │  │  ├─ Spinner.tsx
+│  │  │  └─ SpinnerParams.ts
+│  │  └─ toast
+│  │     ├─ ShowToast.tsx
+│  │     ├─ ToastParams.ts
+│  │     └─ ToastType.ts
+│  ├─ Stores
+│  │  ├─ slices
+│  │  │  ├─ adsSlice.ts
+│  │  │  ├─ selectedAdSlice.ts
+│  │  │  ├─ spinnerSlice.ts
+│  │  │  └─ toastSlice.ts
+│  │  └─ store.ts
+│  ├─ App.scss
+│  ├─ App.tsx
+│  ├─ index.scss
+│  ├─ main.tsx
+```
 
 
 ## 2. Использованные технологии
