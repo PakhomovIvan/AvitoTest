@@ -27,7 +27,8 @@
 
 ## 1. Структура проекта
 
-![2025-02-17 12-28-38 AdParams ts - AvitoTest - Visual Studio Code](https://github.com/user-attachments/assets/34207685-7859-4c4e-8f02-b23e47527d19)
+![2025-02-17 12-28-38 AdParams ts - AvitoTest - Visual Studio Code](https://github.com/user-attachments/assets/d2af6f6a-aaa5-41f8-97f6-1a8963892ab1)
+
 
 ## 2. Использованные технологии
 
