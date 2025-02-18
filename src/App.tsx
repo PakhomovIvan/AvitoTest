@@ -18,8 +18,8 @@ function App() {
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Navigate to="/list" replace />} />
-          <Route path="/item/:id" element={<Ad />} />
           <Route path="/list" element={<AdsList />} />
+          <Route path="/list/:id" element={<Ad />} />
           <Route path="/form" element={<AdsForm />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
