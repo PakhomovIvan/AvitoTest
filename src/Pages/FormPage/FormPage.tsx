@@ -41,7 +41,6 @@ const AdsForm = () => {
     name: '',
     description: '',
     location: '',
-    type: '',
     image: '',
   })
   const [additionalFormValue, setAdditionalFormValue] = useState<
