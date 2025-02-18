@@ -8,18 +8,21 @@ const RealtyTypeForm = ({ handleChange, formValue }: ServiceTypeFormProps) => {
 
   return (
     <>
-      <Dropdown
-        id="propertyType"
-        inputId="propertyType"
-        value={formValue?.propertyType}
-        onChange={(e) => {
-          handleChange(e)
-        }}
-        options={realtyType}
-        optionLabel="propertyType"
-        placeholder="Тип недвижимости"
-        className="w-full"
-      />
+      <FloatLabel>
+        <Dropdown
+          id="propertyType"
+          inputId="propertyType"
+          value={formValue?.propertyType}
+          onChange={(e) => {
+            handleChange(e)
+          }}
+          options={realtyType}
+          optionLabel="propertyType"
+          placeholder="Тип недвижимости"
+          className="w-full"
+        />
+        <label htmlFor="propertyType">Тип недвижимости</label>
+      </FloatLabel>
       <FloatLabel>
         <InputText
           autoComplete="off"
