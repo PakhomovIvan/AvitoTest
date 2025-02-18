@@ -21,7 +21,7 @@ import {
 import { hideSpinner, showSpinner } from '../../Stores/slices/spinnerSlice'
 import { setToast } from '../../Stores/slices/toastSlice'
 import { AppDispatch } from '../../Stores/store'
-import './FormPage.scss'
+import styles from './FormPage..module.scss'
 
 const AdsForm = () => {
   const url = import.meta.env.VITE_API_URL
@@ -281,14 +281,14 @@ const AdsForm = () => {
   }
 
   return (
-    <div className="form-wrapper">
+    <div className={styles['form-wrapper']}>
       {String(selectedAdMode) === 'edit' ? (
         <h1>Редактирование объявления</h1>
       ) : (
         <h1>Создание объявления</h1>
       )}
 
-      <form className="ad-form">
+      <form className={styles['ad-form']}>
         {activeStep === 0 && (
           <MainForm
             handleChange={handleChangeMainForm}
@@ -314,8 +314,12 @@ const AdsForm = () => {
             />
           ))}
       </form>
-      <Steps model={items} activeIndex={activeStep} className="steps-panel" />
-      <div className="form-controls">
+      <Steps
+        model={items}
+        activeIndex={activeStep}
+        className={styles['steps-panel']}
+      />
+      <div className={styles['form-controls']}>
         <ConfirmPopup ref={confirmPopupRef} />
         <Button
           label="Назад"

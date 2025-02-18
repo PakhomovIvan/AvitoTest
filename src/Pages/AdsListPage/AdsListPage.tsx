@@ -12,7 +12,7 @@ import { fetchAds, selectAds } from '../../Stores/slices/adsSlice'
 import { selectedAdActions } from '../../Stores/slices/selectedAdSlice'
 import { hideSpinner, showSpinner } from '../../Stores/slices/spinnerSlice'
 import { AppDispatch } from '../../Stores/store'
-import './AdsListPage.scss'
+import styles from './AdsListPage.module.scss'
 
 export default function AdsList() {
   const dispatch = useDispatch<AppDispatch>()
@@ -89,7 +89,7 @@ export default function AdsList() {
 
   const header = () => {
     return (
-      <div className="card-actions">
+      <div className={styles['card-actions']}>
         <Dropdown
           options={sortOptions}
           value={selectedCategory}
@@ -131,7 +131,7 @@ export default function AdsList() {
   }
 
   return (
-    <div className="card">
+    <div className={styles.card}>
       <Button
         label="Разместить объявление"
         onClick={() => {

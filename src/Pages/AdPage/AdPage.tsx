@@ -3,11 +3,10 @@ import { Image } from 'primereact/image'
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
-import { AdParams } from '../../Common/Models/AdParams'
 import { fetchSelectedAd } from '../../Stores/slices/selectedAdSlice'
 import { hideSpinner, showSpinner } from '../../Stores/slices/spinnerSlice'
 import { AppDispatch } from '../../Stores/store'
-import './AdPage.scss'
+import styles from './AdPage.module.scss'
 
 const Ad = () => {
   const url = import.meta.env.VITE_API_URL
@@ -15,7 +14,7 @@ const Ad = () => {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
   const params = useParams()
-  const [selectedAd, setSelectedAd] = useState<AdParams | null>(null)
+  const [selectedAd, setSelectedAd] = useState()
 
   const linkTo = useCallback(
     (url: string): void => {
@@ -54,12 +53,12 @@ const Ad = () => {
   return (
     <>
       {selectedAd && (
-        <div className="ad-wrapper">
+        <div className={styles['ad-wrapper']}>
           <div>
             <h1>{selectedAd.name}</h1>
             <p>{selectedAd.description}</p>
           </div>
-          <div className="ad-list">
+          <div className={styles['ad-info']}>
             <Image
               src={selectedAd.image ? selectedAd.image : '/img/no-image.png'}
               onError={({ currentTarget }) => {
@@ -69,7 +68,7 @@ const Ad = () => {
               width="230"
               preview
             />
-            <div className="ad-info">
+            <div>
               <h3>{selectedAd.type}</h3>
               {selectedAd.type === 'Недвижимость' && (
                 <div>
@@ -101,7 +100,7 @@ const Ad = () => {
               )}
             </div>
           </div>
-          <div className="controls">
+          <div className={styles.controls}>
             <Button
               label="К списку объявлений"
               onClick={() => linkTo('/list')}

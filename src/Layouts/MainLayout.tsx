@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
-import './MainLayout.scss'
+import styles from './MainLayout.module.scss'
 
 const MainLayout = () => {
   const navigate = useNavigate()
@@ -11,9 +11,8 @@ const MainLayout = () => {
   }, [navigate, location])
 
   return (
-    <div className="wrapper">
-      {/* Menu */}
-      <div className="wrapper-outlet">
+    <div className={styles.wrapper}>
+      <div className={styles['wrapper-outlet']}>
         <Outlet />
       </div>
     </div>
