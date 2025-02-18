@@ -57,19 +57,22 @@ const MainForm = ({
         />
         <label htmlFor="image">Ссылка на изображение</label>
       </FloatLabel>
-      <Dropdown
-        id="type"
-        inputId="type"
-        value={formValue?.type}
-        onChange={(e) => {
-          handleChange(e)
-          setAdditionalFormValue(null)
-        }}
-        options={adType}
-        optionLabel="type"
-        placeholder="Тип объявления"
-        className="w-full"
-      />
+      <FloatLabel>
+        <Dropdown
+          id="type"
+          inputId="type"
+          value={formValue?.type}
+          onChange={(e) => {
+            handleChange(e)
+            setAdditionalFormValue(null)
+          }}
+          options={adType}
+          optionLabel="type"
+          placeholder="Тип объявления"
+          className="w-full"
+        />
+        <label htmlFor="type">Тип объявления</label>
+      </FloatLabel>
     </>
   )
 }

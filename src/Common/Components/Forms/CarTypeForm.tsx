@@ -8,18 +8,21 @@ const CarTypeForm = ({ handleChange, formValue }: ServiceTypeFormProps) => {
 
   return (
     <>
-      <Dropdown
-        id="brand"
-        inputId="brand"
-        value={formValue?.brand}
-        onChange={(e) => {
-          handleChange(e)
-        }}
-        options={brandType}
-        optionLabel="brand"
-        placeholder="Марка"
-        className="w-full"
-      />
+      <FloatLabel>
+        <Dropdown
+          id="brand"
+          inputId="brand"
+          value={formValue?.brand}
+          onChange={(e) => {
+            handleChange(e)
+          }}
+          options={brandType}
+          optionLabel="brand"
+          placeholder="Марка"
+          className="w-full"
+        />
+        <label htmlFor="brand">Марка</label>
+      </FloatLabel>
       <FloatLabel>
         <InputText
           autoComplete="off"

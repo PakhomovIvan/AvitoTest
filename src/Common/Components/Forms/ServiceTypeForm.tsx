@@ -8,18 +8,21 @@ const ServiceTypeForm = ({ handleChange, formValue }: ServiceTypeFormProps) => {
 
   return (
     <>
-      <Dropdown
-        id="serviceType"
-        inputId="serviceType"
-        value={formValue?.serviceType}
-        onChange={(e) => {
-          handleChange(e)
-        }}
-        options={service}
-        optionLabel="serviceType"
-        placeholder="Тип услуги"
-        className="w-full"
-      />
+      <FloatLabel>
+        <Dropdown
+          id="serviceType"
+          inputId="serviceType"
+          value={formValue?.serviceType}
+          onChange={(e) => {
+            handleChange(e)
+          }}
+          options={service}
+          optionLabel="serviceType"
+          placeholder="Тип услуги"
+          className="w-full"
+        />
+        <label htmlFor="serviceType">Тип услуги</label>
+      </FloatLabel>
       <FloatLabel>
         <InputText
           autoComplete="off"

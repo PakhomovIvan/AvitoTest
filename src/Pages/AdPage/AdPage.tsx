@@ -3,6 +3,7 @@ import { Image } from 'primereact/image'
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
+import { AdParams } from '../../Common/Models/AdParams'
 import { fetchSelectedAd } from '../../Stores/slices/selectedAdSlice'
 import { hideSpinner, showSpinner } from '../../Stores/slices/spinnerSlice'
 import { AppDispatch } from '../../Stores/store'
@@ -14,7 +15,7 @@ const Ad = () => {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
   const params = useParams()
-  const [selectedAd, setSelectedAd] = useState()
+  const [selectedAd, setSelectedAd] = useState<AdParams | null>(null)
 
   const linkTo = useCallback(
     (url: string): void => {
