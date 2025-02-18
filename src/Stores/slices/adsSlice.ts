@@ -33,10 +33,10 @@ export const deleteAd = createAsyncThunk('ads/deleteAd', async (id: number) => {
 
 export const postAd = createAsyncThunk<
   AdParams,
-  { url: string; ad: Omit<AdParams, 'id'> },
+  { url: string; adId: Omit<AdParams, 'id'> },
   { rejectValue: string }
->('ads/postAd', async ({ url, ad }) => {
-  const res = await axios.post<AdParams>(url, ad)
+>('ads/postAd', async ({ url, adId }) => {
+  const res = await axios.post<AdParams>(url, adId)
   return res.data
 })
 
