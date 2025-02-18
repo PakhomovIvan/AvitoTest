@@ -31,10 +31,14 @@
 
 ## <a name="structure">1. Структура проекта</a>
 
-``` 
+```
+📦 AvitoTest
 ├─ server
+│  ├─ Dockerfile
 │  ├─ app.js
 ├─ src
+│  ├─ App.scss
+│  ├─ App.tsx
 │  ├─ Common
 │  │  ├─ Components
 │  │  │  └─ Forms
@@ -55,17 +59,17 @@
 │  │        ├─ RealtyAd.ts
 │  │        └─ ServicesAd.ts
 │  ├─ Layouts
-│  │  ├─ MainLayout.scss
+│  │  ├─ MainLayout.module.scss
 │  │  └─ MainLayout.tsx
 │  ├─ Pages
 │  │  ├─ AdPage
-│  │  │  ├─ AdPage.scss
+│  │  │  ├─ AdPage.module.scss
 │  │  │  └─ AdPage.tsx
 │  │  ├─ AdsListPage
-│  │  │  ├─ AdsListPage.scss
+│  │  │  ├─ AdsListPage.module.scss
 │  │  │  └─ AdsListPage.tsx
 │  │  ├─ FormPage
-│  │  │  ├─ FormPage.scss
+│  │  │  ├─ FormPage..module.scss
 │  │  │  └─ FormPage.tsx
 │  │  └─ NotFoundPage
 │  │     └─ NotFoundPage.tsx
@@ -87,12 +91,13 @@
 │  │  │  ├─ spinnerSlice.ts
 │  │  │  └─ toastSlice.ts
 │  │  └─ store.ts
-│  ├─ App.scss
-│  ├─ App.tsx
-│  ├─ index.scss
 │  ├─ main.tsx
+│  └─ vite-env.d.ts
+├─ tsconfig.app.json
+├─ tsconfig.json
+├─ tsconfig.node.json
+└─ vite.config.ts
 ```
-
 
 ## 2. Использованные технологии
 
