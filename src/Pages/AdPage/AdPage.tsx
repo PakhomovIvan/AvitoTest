@@ -1,6 +1,6 @@
 import { Button } from 'primereact/button'
 import { Image } from 'primereact/image'
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { AdParams } from '../../Common/Models/AdParams'
@@ -42,11 +42,11 @@ const Ad = () => {
       .finally(() => dispatch(hideSpinner()))
   }
 
-  useEffect(() => {
-    if (!ad) {
-      linkTo('/list')
-    }
-  }, [navigate, ad, linkTo])
+  // useEffect(() => {
+  //   if (!ad) {
+  //     linkTo('/list')
+  //   }
+  // }, [navigate, ad, linkTo])
 
   if (!adList) {
     return <div>Loading...</div>

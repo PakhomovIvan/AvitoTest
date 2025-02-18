@@ -65,7 +65,7 @@ export default function AdsList() {
               <Button
                 label="Открыть"
                 className="p-button-rounded"
-                onClick={() => navigate(`/item/${ad.id}`)}
+                onClick={() => navigate(`./${ad.id}`)}
               ></Button>
             </div>
           </div>
